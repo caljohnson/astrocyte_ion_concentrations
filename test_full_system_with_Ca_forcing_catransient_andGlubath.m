@@ -1,7 +1,7 @@
 %Test_Full_System.m
 %tracks changes in intra- and extra-cellular ion concentrations
 %of extracellular ions:
-%       Glu, K+, Ca2+, Na+, H+ (Glu_out, K_out, Ca_out, Na_out)
+%       K+, Ca2+, Na+, H+ (K_out, Ca_out, Na_out)
 %and intracellular ions:
 %       K+, Ca2+, Na+ (K_in, Ca_in, Na_in)
 %through EAAT2, Kir4.1, NCX, and NKA
@@ -16,7 +16,7 @@ global g_EAAT2 g_Kir41 g_NCX rho_NKA R F T ...
 F = 96485; %C/mol, Faraday's constant
 R = 8.31; %J/mol K, ideal gas constant
 T = 310; %K, absolute temperature
-g_EAAT2 = 5e-14;
+g_EAAT2 = 3e-14;
 g_Kir41 = 1e-14;
 g_NCX = 1e-9;
 rho_NKA = 1e-13;
@@ -39,7 +39,7 @@ Ca_in = 73*1e-6; %mM - Kirischuk et al. 2012
 %elevated synaptic cleft (extracellular) concentrations
 % Glu_out = 0.1; %mM (elevated) - Flanagan et al 2018
 % Glu_out = 2; %mM (elevated) - Kirischuk et al. 2007 -  this one gives the right internal Na/Ca shapes w/ VolA=1/2VolE
-Glu_out = 3; %mM - - Kirischuk et al. 2007 -  this one gives the right internal Na/Ca shapes when VolA=VolE
+% Glu_out = 10; %mM - bath amount
 % Glu_out = 0; %mM (rest) - Flanagan et al 2018
 % K_out = 12; %12mM (elevated by seizures) - textbook/Flanagan et al. 2018
 % K_out = 5; %Kirischuk et al. 2012
@@ -62,6 +62,8 @@ ts = {};
 tspan = [0,5e2];
 tmaxplot = 5e2;
 
+Glu_bath = @(t) 0*t + 1*(t<20); %1mM bath for 20 seconds
+
 for jj=1:2
 if jj==1
     Ca_force = @(t) 0.*t + 1e-1.*(t-0).*(t>=0 & t<5) + ...
@@ -80,19 +82,19 @@ elseif jj==2
     Ca_force = @(t) 0.*t;
 end
    
-X0 = [Na_in; K_in; Ca_in; Na_out; K_out; Ca_out; Glu_out; Vm];
+X0 = [Na_in; K_in; Ca_in; Na_out; K_out; Ca_out; Vm];
 
 options = odeset('RelTol',1e-8,'AbsTol',1e-10,'MaxStep',1);
-[t,X] = ode15s(@(t,X) system_eqns_with_ca_signal_v2(t,X,Ca_force), tspan, X0,options);
+[t,X] = ode15s(@(t,X) system_eqns_with_Glu_bath(t,X,Glu_bath,Ca_force), tspan, X0,options);
 dt = 1e-1;
 t0 = tspan(1):dt:tspan(2);
 X = interp1(t,X,t0);
 t = t0;
 
 labels = {'[Na^+]_i, mM'; '[K^+]_i, mM'; '[Ca^{2+}]_i, mM';...
-    '[Na^+]_e, mM'; '[K^+]_e, mM'; '[Ca^{2+}]_e, mM'; '[Glu^-]_e, mM';...
+    '[Na^+]_e, mM'; '[K^+]_e, mM'; '[Ca^{2+}]_e, mM';...
      'V_m, mV';};
-for ii=1:8
+for ii=1:7
     figure(ii);
     
     if jj==1
@@ -106,10 +108,10 @@ for ii=1:8
     
     ylabel(labels(ii)); xlabel('t');
     set(gca,'FontSize',20);
-    legend('Glu pulse, calcium transient', ...
-    'Glu pulse, no calcium transient');
+    legend('Glu bath, calcium transient', ...
+    'Glu bath, no calcium transient');
     xlim([0 tmaxplot])
-    if ii==8
+    if ii==7
         ylim([-100,-60]);
     end
 end
@@ -130,53 +132,53 @@ if jj==1
 end
 hold on;
 ylabel('I_{NKA}'); xlabel('t'); set(gca,'FontSize',20); xlim([0 tmaxplot])
-    legend('Glu pulse, calcium transient', ...
-    'Glu pulse, no calcium transient');
+    legend('Glu bath, calcium transient', ...
+    'Glu bath, no calcium transient');
 
 figure(10);
 if jj==1
-        plot(t,g_NCX.*ncx_current(X(:,4),X(:,1),X(:,6),X(:,3),X(:,8)),'LineWidth',4);
+        plot(t,g_NCX.*ncx_current(X(:,4),X(:,1),X(:,6),X(:,3),X(:,7)),'LineWidth',4);
     elseif jj==2
-        plot(t,g_NCX.*ncx_current(X(:,4),X(:,1),X(:,6),X(:,3),X(:,8)),'--','LineWidth',4);
+        plot(t,g_NCX.*ncx_current(X(:,4),X(:,1),X(:,6),X(:,3),X(:,7)),'--','LineWidth',4);
     else
-        plot(t,g_NCX.*ncx_current(X(:,4),X(:,1),X(:,6),X(:,3),X(:,8)),'-.','LineWidth',4);
+        plot(t,g_NCX.*ncx_current(X(:,4),X(:,1),X(:,6),X(:,3),X(:,7)),'-.','LineWidth',4);
 end
 hold on; ylim([-2 2].*1e-12)
 ylabel('I_{NCX}'); xlabel('t'); set(gca,'FontSize',20); xlim([0 tmaxplot])
-    legend('Glu pulse, calcium transient', ...
-    'Glu pulse, no calcium transient');
+    legend('Glu bath, calcium transient', ...
+    'Glu bath, no calcium transient');
 
 figure(11);
-plot(t,g_EAAT2*eaat2_current(X(:,4),X(:,7), H_out, X(:,2), X(:,5),X(:,8)),'LineWidth',2); hold on;
+plot(t,g_EAAT2*eaat2_current(X(:,4),Glu_bath(t)', H_out, X(:,2), X(:,5),X(:,7)),'LineWidth',2); hold on;
 ylabel('I_{EAAT2}'); xlabel('t'); set(gca,'FontSize',20); xlim([0 tmaxplot])
-    legend('Glu pulse, calcium transient', ...
-    'Glu pulse, no calcium transient');
+    legend('Glu bath, calcium transient', ...
+    'Glu bath, no calcium transient');
 
 figure(12);
     if jj==1
-        plot(t,g_Kir41.*kir41_current(X(:,5),X(:,2),X(:,8)),'LineWidth',4);
+        plot(t,g_Kir41.*kir41_current(X(:,5),X(:,2),X(:,7)),'LineWidth',4);
     elseif jj==2
-        plot(t,g_Kir41.*kir41_current(X(:,5),X(:,2),X(:,8)),'--','LineWidth',4);
+        plot(t,g_Kir41.*kir41_current(X(:,5),X(:,2),X(:,7)),'--','LineWidth',4);
     else
-        plot(t,g_Kir41.*kir41_current(X(:,5),X(:,2),X(:,8)),'-.','LineWidth',4);
+        plot(t,g_Kir41.*kir41_current(X(:,5),X(:,2),X(:,7)),'-.','LineWidth',4);
     end
 hold on
 ylabel('I_{Kir}'); xlabel('t'); set(gca,'FontSize',20); xlim([0 tmaxplot])
-    legend('Glu pulse, calcium transient', ...
-    'Glu pulse, no calcium transient');
+    legend('Glu bath, calcium transient', ...
+    'Glu bath, no calcium transient');
 
 figure(13);
 if jj==1
-        plot(t,g_Na_leak1.*na_leak_current(X(:,4),X(:,1), X(:,8)),'LineWidth',4);
+        plot(t,g_Na_leak1.*na_leak_current(X(:,4),X(:,1), X(:,7)),'LineWidth',4);
     elseif jj==2
-        plot(t,g_Na_leak1.*na_leak_current(X(:,4),X(:,1), X(:,8)),'--','LineWidth',4);
+        plot(t,g_Na_leak1.*na_leak_current(X(:,4),X(:,1), X(:,7)),'--','LineWidth',4);
     else
-        plot(t,g_Na_leak1.*na_leak_current(X(:,4),X(:,1), X(:,8)),'-.','LineWidth',4);
+        plot(t,g_Na_leak1.*na_leak_current(X(:,4),X(:,1), X(:,7)),'-.','LineWidth',4);
 end
 hold on
 ylabel('I_{NaLeak}'); xlabel('t'); set(gca,'FontSize',20); xlim([0 tmaxplot])
-    legend('Glu pulse, calcium transient', ...
-    'Glu pulse, no calcium transient');
+    legend('Glu bath, calcium transient', ...
+    'Glu bath, no calcium transient');
 
 % figure(13);
 % V_NaCa = (R*T/F).*(3*log(X(:,4)./X(:,1))-log(X(:,6)./X(:,3))).*1e3; %mV
@@ -205,6 +207,6 @@ Na_outs{jj} = X(:,4);
 K_outs{jj} = X(:,5);
 ts{jj} = t;
 
-% save('Na_K_outs_Glupulses.mat','ts','Na_outs', 'K_outs');
+% save('Na_K_outs_Glubath.mat','ts','Na_outs', 'K_outs');
 end
 % figure(5);
