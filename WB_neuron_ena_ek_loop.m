@@ -13,7 +13,7 @@ addpath('./src'); close all; clear;
 F = 96485; %C/mol, Faraday's constant
 R = 8.31; %J/mol K, ideal gas constant
 T = 310; %K, absolute temperature
-tmax = 1e2;
+tmax = 1e3;
 
 %neural concentrations
 K_in = 93.2; %mM  - set to make V_K = -90 mV at rest
@@ -23,12 +23,14 @@ Na_in = 17.8; %mM - set to make V_Na = 55 mV at rest
 % V_Na = (R*T/F).*log(Na_out./Na_in).*1e3;
 % V_K = (R*T/F).*log(K_out./K_in).*1e3;
 
-E_Ks = -95:1:-50;
-E_Nas = 52.5:0.5:55.5;
+E_Ks = -95:0.25:-50;
+E_Nas = 50:0.25:56;
 % Iapps = 0.12:0.005:0.13;
-Iapps = 0.11;
+% Iapps = 0.11;
+% Iapps = -0.685;
+Iapps = 0.165;
 
-thresh = -5; %firing threshold
+thresh = 0; %firing threshold
 
 [x,y] = meshgrid(E_Nas,E_Ks);
 x = x(:);
@@ -36,8 +38,8 @@ y = y(:);
 
 freq = zeros(size(E_Ks,2),size(E_Nas,2));
 delay = zeros(size(E_Ks,2),size(E_Nas,2));
-% V0 = -64;
-V0 = -50;
+V0 = -64;
+% V0 = -55;
 for ii=1:size(Iapps,2)
     I = Iapps(ii);
     for jj=1:size(E_Ks,2)
@@ -92,14 +94,16 @@ for ii=1:size(Iapps,2)
     title(['Frequency (Hz), I_{app} = ' num2str(Iapps(ii))]);
     set(gca,'FontSize',20);
 
-    figure(ii+3);
-    surf(E_Nas,E_Ks,delay); view(2); shading flat;
-%     scatter(x,y,30,delay(:),'LineWidth',4);
-    colorbar
-    xlabel('E_{Na} (mV)'); ylabel('E_K (mV)');
-    xlim([min(E_Nas) max(E_Nas)]); ylim([min(E_Ks) max(E_Ks)]);
-    title(['Delay (msec), I_{app} = ' num2str(Iapps(ii))]);
-    set(gca,'FontSize',20);
+%     figure(ii+3);
+%     surf(E_Nas,E_Ks,delay); view(2); shading flat;
+% %     scatter(x,y,30,delay(:),'LineWidth',4);
+%     colorbar
+%     xlabel('E_{Na} (mV)'); ylabel('E_K (mV)');
+%     xlim([min(E_Nas) max(E_Nas)]); ylim([min(E_Ks) max(E_Ks)]);
+%     title(['Delay (msec), I_{app} = ' num2str(Iapps(ii))]);
+%     set(gca,'FontSize',20);
 
 end
+
+save('WB_neuron_ena_ek_loop_Iapp_0165.mat');
 

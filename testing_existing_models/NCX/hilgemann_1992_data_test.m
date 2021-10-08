@@ -40,18 +40,18 @@ kimura_fit = lsqcurvefit(I_NaCa_kimura,2e-5,Vm_data,I_data);
 plot(Vm,I_NaCa_kimura(kimura_fit,Vm),'-','LineWidth',4);
 
 
-%testing flanagan et al 2018 model
-I_NaCa_flanagan = @(x,Vm) x*((Na_in.^3)./(Na_out.^3).*(exp(0.5*Vm*1e-3*F/(R*T))) ...
-   - (Ca_in)./(Ca_out).*(exp(0.5*Vm*1e-3*F/(R*T)))) ;
-%Flanagan model is undefined/infinite for Na_out = 0 mM
+% %testing flanagan et al 2018 model
+% I_NaCa_flanagan = @(x,Vm) x*((Na_in.^3)./(Na_out.^3).*(exp(0.5*Vm*1e-3*F/(R*T))) ...
+%    - (Ca_in)./(Ca_out).*(exp(0.5*Vm*1e-3*F/(R*T)))) ;
+% %Flanagan model is undefined/infinite for Na_out = 0 mM
 % flanagan_fit = lsqcurvefit(I_NaCa_flanagan,-2e-5,Vm_data,I_data);
 % plot(Vm,I_NaCa_flanagan(flanagan_fit,Vm),'-','LineWidth',4);
 
 %testing gall & susa 1999 model
 nH = 1;
 K_H = 1.5*1e-3; %1.5 microM
+Na_out = 1e-10; %mM
 V_NaCa = (R*T/F)*(3*log(Na_out/Na_in)-log(Ca_out/Ca_in))*1e3; %mV
-V_NaCa = -150; %since Na_out = 0, V_NaCa = -inf
 I_NaCa_gall_susa = @(x,Vm) x*(Ca_in.^nH)./(Ca_in.^nH + K_H^nH).*(Vm-V_NaCa);
 gall_susa_fit = lsqcurvefit(I_NaCa_gall_susa,-0.07,Vm_data,I_data);
 plot(Vm,I_NaCa_gall_susa(gall_susa_fit,Vm),'-','LineWidth',4);
@@ -64,6 +64,14 @@ line([-150,100],[0,0],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 line([0,0],[0,25],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 
 %data from Hilgemann et al. 1992, Fig7B
+%recording of an outward exchange current at various membrane potentials
+%pipette solution (external): 0mM Na, 2mM Ca
+%cytoplasmic solution (internal): 100mM Na, 2 microM Ca
+Na_in = 100; %mM
+Ca_in = 2e-3; %mM
+Na_out = 0; %mM
+Ca_out = 2; %mM
+
 [V_data2, I_data2] = csvimport('data/hilgemann_1992_fig7b.csv',...
                     'columns', [1, 2] ,'noHeader', true);              
           
@@ -87,18 +95,19 @@ kimura_fit2 = lsqcurvefit(I_NaCa_kimura2,2e-5,V_data2,I_data2);
 plot(Vm,I_NaCa_kimura2(kimura_fit2,Vm),'-','LineWidth',4);
 
 
-%testing flanagan et al 2018 model
-I_NaCa_flanagan2 = @(x,Vm) x*((Na_in.^3)./(Na_out.^3).*(exp(0.5*Vm*1e-3*F./(R*T))) ...
-   - (Ca_in)./(Ca_out).*(exp(0.5*Vm*1e-3*F./(R*T)))) ;
-%Flanagan model is undefined/infinite for Na_out = 0 mM
+% %testing flanagan et al 2018 model
+% Na_out = 1e-10; %mM
+% I_NaCa_flanagan2 = @(x,Vm) x*((Na_in.^3)./(Na_out.^3).*(exp(0.5*Vm*1e-3*F./(R*T))) ...
+%    - (Ca_in)./(Ca_out).*(exp(0.5*Vm*1e-3*F./(R*T)))) ;
+% %Flanagan model is undefined/infinite for Na_out = 0 mM
 % flanagan_fit = lsqcurvefit(I_NaCa_flanagan,-2e-5,Vm_data,I_data);
 % plot(Vm,I_NaCa_flanagan(flanagan_fit,Vm),'-','LineWidth',4);
 
 % testing gall & susa 1999 model
 nH = 1;
 K_H = 1.5*1e-3; %1.5 microM
-V_NaCa2 = (R*T/F).*(3*log(Na_out/Na_in)-log(Ca_out/Ca_in))*1e3; %mV
-V_NaCa = -150; %since Na_out = 0, V_NaCa = -inf
+Na_out = 1e-10; %mM
+V_NaCa = (R*T/F).*(3*log(Na_out/Na_in)-log(Ca_out/Ca_in))*1e3; %mV
 I_NaCa_gall_susa2 = @(x,Vm) x*(Ca_in.^nH)./(Ca_in.^nH + K_H^nH).*(Vm-V_NaCa);
 gall_susa_fit2 = lsqcurvefit(I_NaCa_gall_susa,-0.07,V_data2,I_data2);
 plot(Vm,I_NaCa_gall_susa2(gall_susa_fit2,Vm),'-','LineWidth',4);

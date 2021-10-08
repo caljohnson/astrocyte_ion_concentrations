@@ -11,7 +11,7 @@ load('Na_K_outs_onlyCatransient.mat');
 F = 96485; %C/mol, Faraday's constant
 R = 8.31; %J/mol K, ideal gas constant
 T = 310; %K, absolute temperature
-I = 0; %applied current
+I = -0.6; %applied current
 
 %neural concentrations
 K_in = 93.2; %mM  - set to make V_K = -90 mV at rest
@@ -68,7 +68,8 @@ for ii=1:size(t_checks,1)
     plot([t_checks(ii),t_checks(ii)],[-100, 100],'k:','LineWidth',3,'HandleVisibility','off')
 end
 
-V0 = -57.9;
+% V0 = -57.9;
+V0 = -55;
 % V0s = [-57; -57.5; -58; -60; -65;];
 for ii=1:size(t_checks,1)
 for jj=1:2
@@ -89,7 +90,8 @@ for jj=1:2
     X0 = [V0;1;0;];
     tvec = [0 1e2];
 
-    [t,X] = ode23(@(t,X) wang_buzsaki_hippocampal_neuron_komek_version_ode(t,X,I,V_Na,V_K), tvec, X0);
+%     [t,X] = ode23(@(t,X) wang_buzsaki_hippocampal_neuron_komek_version_ode(t,X,I,V_Na,V_K), tvec, X0);
+    [t,X] = ode23(@(t,X) wang_buzsaki_hippocampal_neuron_ode(t,X,I,V_Na,V_K), tvec, X0);
     figure(ii+2); hold on
     if jj==1
         plot(t,X(:,1),'LineWidth',4);

@@ -59,8 +59,9 @@ Vm = -80; %mV, resting astrocyte membrane potential Kirischuk et al. 2012
 Na_outs = {};
 K_outs = {};
 ts = {};
-tspan = [0,5e2];
 tmaxplot = 5e2;
+tspan = [0,tmaxplot];
+tpulse = 20;
 
 for jj=1:2
 if jj==1
@@ -83,11 +84,29 @@ end
 X0 = [Na_in; K_in; Ca_in; Na_out; K_out; Ca_out; Glu_out; Vm];
 
 options = odeset('RelTol',1e-8,'AbsTol',1e-10,'MaxStep',1);
+%1 - initial glu
 [t,X] = ode15s(@(t,X) system_eqns_with_ca_signal_v2(t,X,Ca_force), tspan, X0,options);
-dt = 1e-1;
-t0 = tspan(1):dt:tspan(2);
-X = interp1(t,X,t0);
-t = t0;
+
+%2 pulses
+% [t1,X1] = ode15s(@(t,X) system_eqns_with_ca_signal_v2(t,X,Ca_force), [0 tpulse], X0,options);
+
+% X02 = X1(end,:);
+% X02(7) = 3; %reset to new Glu pulse
+% % [t2,X2] = ode15s(@(t,X) system_eqns_with_ca_signal_v2(t,X,Ca_force), [tpulse tmaxplot], X02,options);
+% [t2,X2] = ode15s(@(t,X) system_eqns_with_ca_signal_v2(t,X,Ca_force), [tpulse 2*tpulse], X02,options);
+% % X = [X1; X2;];
+% % t = [t1; t2;];
+
+% X03 = X2(end,:);
+% X03(7) = 3; %reset to new Glu pulse
+% [t3,X3] = ode15s(@(t,X) system_eqns_with_ca_signal_v2(t,X,Ca_force), [2*tpulse tmaxplot], X03,options);
+% X = [X1; X2; X3;];
+% t = [t1; t2; t3;];
+
+% dt = 1e-1;
+% t0 = tspan(1):dt:tspan(2);
+% X = interp1(t,X,t0);
+% t = t0;
 
 labels = {'[Na^+]_i, mM'; '[K^+]_i, mM'; '[Ca^{2+}]_i, mM';...
     '[Na^+]_e, mM'; '[K^+]_e, mM'; '[Ca^{2+}]_e, mM'; '[Glu^-]_e, mM';...
@@ -205,6 +224,8 @@ Na_outs{jj} = X(:,4);
 K_outs{jj} = X(:,5);
 ts{jj} = t;
 
-% save('Na_K_outs_Glupulses.mat','ts','Na_outs', 'K_outs');
 end
 % figure(5);
+
+save('Na_K_outs_Glupulses.mat','ts','Na_outs', 'K_outs');
+

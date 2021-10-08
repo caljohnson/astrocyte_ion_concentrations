@@ -13,9 +13,9 @@ addpath('./src'); %close all; clear;
 F = 96485; %C/mol, Faraday's constant
 R = 8.31; %J/mol K, ideal gas constant
 T = 310; %K, absolute temperature
-% tmax = 1e3; %v1
-tmax = 5e3; %v2,v3, v4
-thresh = -5; %v4
+
+tmax = 1e3; %max runtime
+thresh = 0; %v4,v5
 
 %neural concentrations
 K_in = 93.2; %mM  - set to make V_K = -90 mV at rest
@@ -30,15 +30,21 @@ Na_in = 17.8; %mM - set to make V_Na = 55 mV at rest
 % Iapps = 0:0.01:0.2; %v1
 % Iapps = 0:0.005:0.11; %v2
 
-%v3 params
-E_Ks = -95:2.5:-50;
-E_Nas = 52.5:0.25:55.5;
-% Iapps = 0.10:0.01:0.12;
-Iapps = 0.11; %v4
+%params to loop over
+E_Ks = -95:0.25:-50; %v1, v4
+% E_Ks = -95:0.25:-80; %v2,v3
+E_Nas = 50:0.25:56;
+% Iapps = 0.0:0.1:1; %v1,v2
+Iapps = 0.1:0.01:0.2; %v3, v4
+
+% E_Ks = -90;
+% E_Nas = 55;
+% Iapps = 0.6; %base case test
 
 freq = zeros(size(Iapps,2),size(E_Ks,2),size(E_Nas,2));
 delay = zeros(size(Iapps,2),size(E_Ks,2),size(E_Nas,2));
-V0 = -64;
+V0 = -64; 
+
 tic
 for ii=1:size(Iapps,2)
     I = Iapps(ii);
@@ -59,13 +65,13 @@ for ii=1:size(Iapps,2)
 %     figure(12); plot(t,X(:,1), 'LineWidth',4);
     spiked_1 = 0;
     spiked_2 = 0;
-    tt = 1;
+    tt = round(size(t,1)/2); %start looking for frequency in second half of simulation trace
     while tt <= size(t,1) && spiked_2 == 0
-        if spiked_1 == 1 && X(tt,1) > thresh && X(tt-1) <=thresh && spiked_2 == 0
+        if spiked_1 == 1 && X(tt,1) > thresh && X(tt-1,1) <=thresh && spiked_2 == 0
             spiked_2 = 1;
             spike_time2 = tt;
         end
-        if X(tt,1) > thresh && X(tt-1) <=thresh && spiked_1 == 0
+        if X(tt,1) > thresh && X(tt-1,1) <=thresh && spiked_1 == 0
             spiked_1 = 1;
             spike_time1 = tt;
         end
@@ -106,7 +112,10 @@ for ii=1:size(Iapps,2)
 
 end
 
-% save('remote_WB_neuron_ena_ek_loop.mat'); %v1
-% save('remote_WB_neuron_ena_ek_loop_v2.mat'); 
-% save('remote_WB_neuron_ena_ek_loop_v3.mat');
-save('remote_WB_neuron_ena_ek_loop_v4.mat');
+% save('remote_WB_neuron_ena_ek_loop_v1.mat'); %v1 
+%  save('remote_WB_neuron_ena_ek_loop_v2.mat'); %v2
+%  save('remote_WB_neuron_ena_ek_loop_v3.mat'); %v3
+% save('remote_WB_neuron_ena_ek_loop_v4.mat'); %v4
+save('remote_WB_neuron_ena_ek_loop_v5.mat'); %v5
+
+

@@ -1,15 +1,20 @@
 %figs_WB_neuron_ena_ek_astrocyte_trajectory
 
-load('remote_WB_neuron_ena_ek_loop_v4.mat');
+% load('remote_WB_neuron_ena_ek_loop_v4.mat');
+load('WB_neuron_ena_ek_loop_Iapp_0165.mat');
 
 close all; 
 [x,y] = meshgrid(E_Nas,E_Ks);
 x = x(:);
 y = y(:);
-         
-freqs = reshape(freq(1,:,:),size(E_Ks,2),size(E_Nas,2));
+
+% ii=7;
+ii=1;
+freqs = freq;
+        
+% freqs = reshape(freq(ii,:,:),size(E_Ks,2),size(E_Nas,2));
 freqs(freqs==0)= NaN;
-delays = reshape(delay(1,:,:),size(E_Ks,2),size(E_Nas,2));
+% delays = reshape(delay(1,:,:),size(E_Ks,2),size(E_Nas,2));
    
 figure(1);
 % surf(E_Nas,E_Ks,freqs); view(2); shading flat; 
@@ -20,14 +25,14 @@ xlim([min(E_Nas) max(E_Nas)]); ylim([min(E_Ks) max(E_Ks)]);
 title(['Frequency (Hz), I_{app} = ' num2str(Iapps(ii))]);
 set(gca,'FontSize',20); set(gcf, 'Position', get(0, 'Screensize'));
 
-figure(2);
-% surf(E_Nas,E_Ks,delays); view(2); shading flat;
-scatter(x,y,100,delays(:),'LineWidth',4); 
-hold on; colorbar
-xlabel('E_{Na} (mV)'); ylabel('E_K (mV)');
-xlim([min(E_Nas) max(E_Nas)]); ylim([min(E_Ks) max(E_Ks)]);
-title(['Delay (msec), I_{app} = ' num2str(Iapps(ii))]);
-set(gca,'FontSize',20); set(gcf, 'Position', get(0, 'Screensize'));
+% figure(2);
+% % surf(E_Nas,E_Ks,delays); view(2); shading flat;
+% scatter(x,y,100,delays(:),'LineWidth',4); 
+% hold on; colorbar
+% xlabel('E_{Na} (mV)'); ylabel('E_K (mV)');
+% xlim([min(E_Nas) max(E_Nas)]); ylim([min(E_Ks) max(E_Ks)]);
+% title(['Delay (msec), I_{app} = ' num2str(Iapps(ii))]);
+% set(gca,'FontSize',20); set(gcf, 'Position', get(0, 'Screensize'));
 
 %highlight "normal" conditions
 figure(1);
@@ -54,7 +59,7 @@ Na_out = Na_outs{2};
 V_Nas = (R*T/F).*log(Na_out./Na_in).*1e3;
 V_Ks = (R*T/F).*log(K_out./K_in).*1e3;
 plot(V_Nas,V_Ks,'c-','LineWidth',4)
-plot_dir(V_Nas,V_Ks,'c')
+% plot_dir(V_Nas,V_Ks,'c')
 
 h= legend('nonzero frequencies', 'resting conditions','elevated K^+',...
     'astrocyte effects, w/ Calcium transient',...

@@ -21,14 +21,15 @@ V_Ks = -90; %resting
 V_Nas = 55; %resting
 % V_Ks = -75;
 % V_Nas = 53.5;
-V_Nas = 55;
-tmax = 1e3;
+% V_Nas = 55;
+tmax = 1e2;
 
 % I = 5;
-I = 0.11;
+% I = 0.11;
 % I = 0;
+I = -0.6;
 
-V0s = -50;
+V0s = -55;
 % V0s = [-58.8; -58.65; -58.5; -58;];
 for kk=1:size(V0s,1)
 for jj=1:size(V_Ks,1)
@@ -45,7 +46,8 @@ for jj=1:size(V_Ks,1)
     tvec = [0 tmax];
 
 %     [t,X] = ode23s(@(t,X) wang_buzsaki_hippocampal_neuron_komek_version_ode(t,X,I,V_Na,V_K), tvec, X0);
-    [t,X] = ode23s(@(t,X) wang_buzsaki_hippocampal_neuron_ode(t,X,I,V_Na,V_K), tvec, X0);
+%     [t,X] = ode23s(@(t,X) wang_buzsaki_hippocampal_neuron_ode(t,X,I,V_Na,V_K), tvec, X0);
+[t,X] = ode113(@(t,X) wang_buzsaki_hippocampal_neuron_ode(t,X,I,V_Na,V_K), tvec, X0);
     figure(jj); hold on
 %     figure(1); hold on
     plot(t,X(:,1),'LineWidth',4); ylim([-100,40])   
@@ -83,6 +85,7 @@ end
 % plot([250, 250], [-100, -90],':k','LineWidth',4)
 % plot([300, 300], [-100, -90],':k','LineWidth',4)
 
+return 
 % 
 %see if neuron can "turn off" after astrocyte effects
 % V_Na = 54;

@@ -39,9 +39,10 @@ V_Nas = (R*T/F).*log(Na_outs./Na_in).*1e3;
 V_Ks = (R*T/F).*log(K_outs./K_in).*1e3;
 
 
-I = 0;% + 0.2.*(t>50 && t<100)+10.*(t>250 && t<300);
+% I = 0;% + 0.2.*(t>50 && t<100)+10.*(t>250 && t<300);
+I = -0.6;
 
-V0s = [-57; -57.5; -58; -60; -65;];
+V0s = [-55; -57; -57.5; -58; -60; -65;];
 for jj=1:size(K_outs,1)
 for kk=1:size(V0s,1)
     
@@ -55,8 +56,8 @@ for kk=1:size(V0s,1)
     tmax = 1e2;
     tvec = [t0 tmax];
 
-    [t,X] = ode23(@(t,X) wang_buzsaki_hippocampal_neuron_komek_version_ode(t,X,I,V_Na,V_K), tvec, X0);
-%     [t,X] = ode23s(@(t,X) wang_buzsaki_hippocampal_neuron_ode(t,X,I,V_Na,V_K), tvec, X0);
+%     [t,X] = ode23(@(t,X) wang_buzsaki_hippocampal_neuron_komek_version_ode(t,X,I,V_Na,V_K), tvec, X0);
+    [t,X] = ode23s(@(t,X) wang_buzsaki_hippocampal_neuron_ode(t,X,I,V_Na,V_K), tvec, X0);
     figure(jj); hold on
     title(['[Na^+]_e = ' num2str(Na_outs(jj)) ' mM, [K^+]_e = ' num2str(K_outs(jj)) ' mM']);
     plot(t,X(:,1),'LineWidth',4); ylim([-100,40])   

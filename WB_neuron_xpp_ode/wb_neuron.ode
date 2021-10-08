@@ -3,49 +3,49 @@
 
 #
 # Parameters used
-p gLe=0.1, EL = -65, Cm = 1
+p gL=0.1, EL = -65, Cm = 1
 p gK=9.0, gNa=35.0
 p ENa=55.0, EK=-90.0
 p phi=5.0
 #
 # Tonic input description and parameters
-#p Iapp=1.3376685
+#p Iapp=1.3376685 in paper?
 p Iapp = 0
 #
 #ODEs
-Ve'=(Iapp-gLe*(Ve-EL)-gNa*(Minf(ve)^3)*he*(Ve-ENa)-gK*(ne^4)*(Ve-EK))/Cm
-he'=phi*(Hinf(ve)-he)/tauH(ve)
-ne'=phi*(Ninf(ve)-ne)/tauN(ve)
+V'=(1/Cm)*(Iapp-gL*(V-EL)-gNa*((Minf(V))^3)*h*(V-ENa)-gK*(n^4)*(V-EK))
+h'=phi*(Hinf(V)-h)/tauH(V)
+n'=phi*(Ninf(V)-n)/tauN(V)
 #
 # functions
-alpham(v)=0.1*(V+35.0)/(1.0-exp(-(V+35.0)/10.0))
-betam(v)=4.0*exp(-(V+60.0)/18.0)
-Minf(v)=alpham(v)/(alpham(v)+betam(v))
+alpham(V)= -0.1*(V+35)/(exp(-0.1*(V+35))-1)
+betam(V)=4.0*exp(-(V+60.0)/18.0)
+Minf(V)=alpham(V)/(alpham(V)+betam(V))
 #
-alphah(v)= 0.07*exp(-(V+58.0)/20.0)
-betah(v)=1.0/(1.0+exp(-(V+28.0)/10.0))
-Hinf(v)=alphah(v)/(alphah(v)+betah(v))
-tauH(v)=1.0/(alphah(v)+betah(v))
+alphah(V)= 0.07*exp(-(V+58.0)/20.0)
+betah(V)=1.0/(exp(-0.1*(V+28.0))+1)
+Hinf(V)=alphah(V)/(alphah(V)+betah(V))
+tauH(V)=1.0/(alphah(V)+betah(V))
 #
-alphan(v)=0.01*(V+34.0)/(1.0-exp(-(V+34.0)/10.00))
-betan(v)=0.125*exp(-(V+44.0)/80.0)
-Ninf(v)=alphan(v)/(alphan(v)+betan(v))
-tauN(v)=1.0/(alphan(v)+betan(v))
+alphan(V)= -0.01*(V+34.0)/(exp(-0.1*(V+34.0))-1)
+betan(V)= 0.125*exp(-(V+44.0)/80.0)
+Ninf(V)=alphan(V)/(alphan(V)+betan(V))
+tauN(V)=1.0/(alphan(V)+betan(V))
 #
 # Initial conditions
-init Ve=-64
-init he=0.78
-init ne=0.09
+init V=-55
+init h=0.78
+init n=0.088
 #
 #
 # Numerics description
 @ XP=T
-@ YP=Ve
+@ YP=V
 @ autoeval=0
 @ TOTAL=100
 @ nOut=10  
-@ DT=0.01,bound=100000,maxstor=1000000
+@ DT=0.0001,bound=100000,maxstor=1000000
 @ METH=euler
 @ TOLER=0.00001
-@ XLO=0.0, XHI=50.0, YLO=-90.0, YHI=30.0
+@ XLO=0.0, XHI=100.0, YLO=-90.0, YHI=30.0
 done

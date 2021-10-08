@@ -86,7 +86,8 @@ Vm = -100;
 V_rev = (R*T/(2*F)).*log((Na_out/Na_in)^3*(K_in/K_out)*(H_out/H_in).*(Glu_out./Glu_in))*1e3; %mV
 
 %remake my model function with new Glu_out since it depends on it
-I_EAAT2 = @(x,Glu) y(1).*(Vm-y(3)).*exp(y(2).*(Vm-y(3))).*(Glu.^x(1)./(x(2).^x(1)+Glu.^x(1)));
+% I_EAAT2 = @(x,Glu) y(1).*(Vm-y(3)).*exp(y(2).*(Vm-y(3))).*(Glu.^x(1)./(x(2).^x(1)+Glu.^x(1)));
+I_EAAT2 = @(x,Glu) (Glu.^x(1)./(x(2).^x(1)+Glu.^x(1)));
 I_norm = @(x,Glu) -I_EAAT2(x,Glu)./max(abs(I_EAAT2(x,Glu)));
 
 %fit my model

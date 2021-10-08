@@ -42,9 +42,9 @@ I_EAAT2 = @(x,Vm) x(1).*(Vm-V_rev).*exp(x(2).*(Vm-V_rev)).*(Glu_out.^nglu./(kglu
 
 %fit to Levy et al., 1998 Fig1 (B) Glutate-transporter GLT-1 (EAAT2 analog) I-V data
 [Vm_data, I_data] = csvimport('data/levy_etal_1998_fig1b.csv', 'columns', [1, 2] ,'noHeader', true);
-%add (V_rev, 0) to dataset
-Vm_data(end+1) = V_rev;
-I_data(end+1) = 0;
+% %add (V_rev, 0) to dataset
+% Vm_data(end+1) = V_rev;
+% I_data(end+1) = 0;
 %flagan fit
 x0 = [alpha,beta];
 flanagan_fit = lsqcurvefit(I_EAAT2_flan,x0,Vm_data,I_data);
@@ -52,16 +52,18 @@ flanagan_fit = lsqcurvefit(I_EAAT2_flan,x0,Vm_data,I_data);
 my_fit = lsqcurvefit(I_EAAT2,[alpha, beta],Vm_data,I_data);
 
 figure(1);clf;
-plot(Vm, I_EAAT2_flan(flanagan_fit,Vm), 'b-','LineWidth',3); hold on
+% plot(Vm, I_EAAT2_flan(flanagan_fit,Vm), 'b-','LineWidth',3); 
+hold on
 plot(Vm, I_EAAT2(my_fit,Vm), 'r-','LineWidth',3); 
 xlabel('membrane potential, mV'); ylabel('current, pA');
 set(gca,'FontSize',20);
 xlim([-125,140]); ylim([-100,0]);
 plot(Vm_data, I_data, 'b^','MarkerSize',10,'LineWidth',2)
-legend('Flanagan et al., 2018 model', 'my model', 'Levy et al., 1998 data')
+% legend('Flanagan et al., 2018 model', 'my model', 'Levy et al., 1998 data')
+legend('simple model', 'Levy et al., 1998 data')
 %axes lines
-line([-165,140],[0,0],'LineStyle','--', 'Color', 'k');
-line([0,0],[-150,100],'LineStyle','--', 'Color', 'k');
+line([-165,140],[0,0],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
+line([0,0],[-150,100],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 
 
 %--------------- Testing models vs. Extracellular Glutamate concentration ----

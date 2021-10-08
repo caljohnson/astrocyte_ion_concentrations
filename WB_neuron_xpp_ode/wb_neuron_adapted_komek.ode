@@ -31,9 +31,9 @@ Ninf(v)=alphan(v)/(alphan(v)+betan(v))
 tauN(v)=1.0/(alphan(v)+betan(v))
 #
 # Initial conditions
-init Ve=-64
+init Ve=-55
 init he=0.78
-init ne=0.09
+init ne=0.088
 #
 #
 # Numerics description

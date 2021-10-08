@@ -78,7 +78,7 @@ lgd.Location = 'northwest';
 line([-150,100],[0,0],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 line([0,0],[-50,50],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 
-title('[Na^+]_i = 100 mM');
+title('[Na^+]_i = 100 mM, [Ca^{2+}]_i = 1 \muM');
 xlim([-150,100]); ylim([-50,100])
 
 
@@ -140,7 +140,7 @@ lgd.Location = 'northwest';
 line([-150,100],[0,0],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 line([0,0],[-50,50],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 
-title('[Na^+]_i = 50 mM');
+title('[Na^+]_i = 50 mM, [Ca^{2+}]_i = 1 \muM');
 xlim([-150,100]); ylim([-50,100])
 
 
@@ -203,7 +203,7 @@ lgd.Location = 'northwest';
 line([-150,100],[0,0],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 line([0,0],[-50,50],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 
-title('[Na^+]_i = 20 mM');
+title('[Na^+]_i = 20 mM, [Ca^{2+}]_i = 1 \muM');
 xlim([-150,100]); ylim([-50,100])
 
 %data from Fig9A - 5 mM Nain
@@ -263,7 +263,7 @@ lgd.Location = 'northwest';
 line([-150,100],[0,0],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 line([0,0],[-50,50],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 
-title('[Na^+]_i = 5 mM');
+title('[Na^+]_i = 5 mM, [Ca^{2+}]_i = 1 \muM');
 xlim([-150,100]); ylim([-50,100])
 
 %Fig 9B - I-V curves

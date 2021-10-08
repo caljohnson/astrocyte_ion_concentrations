@@ -22,16 +22,12 @@ elseif(type==2) %Huguet et al. 2016
 elseif(type==3) %Cressman et al. 2009
     I_current = (1+exp((25-Na_in)/3)).^(-1).*(1+exp(5.5-K_out)).^(-1);% from paper
     
-elseif(type==4) %my own
-    %so that I = 0 at rest/initial concentrations
-    kK = 2; %mM, half activation [K+]e concentration for the astrocytic NKA
-    kNa = 7.7; %mM, half activation [Na+]i concentration for the astrocytic NKA 
-%    I_current = (K_out./(kK + K_out)).^2.*(Na_in./(kNa + Na_in)).^3; 
-%     I_current = (1+exp((kNa-Na_in)/3)).^(-1).*(1+exp((kK-K_out))).^(-1);% my own
-    I_current = ((K_out-3.5)./(kK + K_out)).^2.*(abs(Na_in-140)./(kNa + Na_in)).^3;
-    
-%     I_current = (Na_in >= 16.7).*(K_out >= 3.6).*...
-%         (1+exp((25-Na_in)/3)).^(-1).*(1+exp(5.5-K_out)).^(-1);% from paper
+elseif(type==4) %my own, based on Nakao & Gadsby 1989 data
+    I_NKA_Nahill = @(x, Na_in)  (Na_in.^x(2)./(x(1).^x(2) + Na_in.^x(2)));
+    I_NKA_Khill = @(x, K_out)  (K_out.^x(2)./(x(1).^x(2) + K_out.^x(2)));
+    Nahill_fit = [10.5; 1.3;];
+    Khill_fit = [1.1; 1.15;];
+    I_current = 2e-2.*I_NKA_Nahill(Nahill_fit,Na_in).*I_NKA_Khill(Khill_fit,K_out);
 end
 
 % K_flux = -2*I_current;

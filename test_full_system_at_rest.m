@@ -16,7 +16,7 @@ global g_EAAT2 g_Kir41 g_NCX rho_NKA R F T ...
 F = 96485; %C/mol, Faraday's constant
 R = 8.31; %J/mol K, ideal gas constant
 T = 310; %K, absolute temperature
-g_EAAT2 = 0;%1e-15;
+g_EAAT2 = 0;% not tuned yet
 g_Kir41 = 5e-15;
 g_NCX = 1e-9;
 rho_NKA = 1e-14;
