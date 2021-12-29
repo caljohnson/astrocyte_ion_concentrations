@@ -19,7 +19,7 @@ Astrocyte model to examine the level of astrocyte calcium activity needed to hav
 * Figure 4 (Bifurcation diagrams for the WB neuron model)
     * Run "wb_neuron.ode" in XPP.  
     * To generate the bifurcation diagram, start at a high Iapp, run to steady state in XPP, and launch AUTO.
-        *Use Iapp as the bifurcation parameter and run with negative parameter steps to find the Hopf bifurcation point.
+        * Use Iapp as the bifurcation parameter and run with negative parameter steps to find the Hopf bifurcation point.
     * To generate the frequency/period plots, generate the bifurcation diagram then change the plot type to frequency/period.
 * Figures 5-6 (Simulated ENa,EK stability diagrams for the WB neuron)
     * Run "remote_WB_neuron_ena_ek_loop.m" to generate the data
@@ -29,11 +29,21 @@ Astrocyte model to examine the level of astrocyte calcium activity needed to hav
     * Run "figs_remote_WB_neuron_ena_ek_loop_3dbifdiag.m" to generate the figures from the data
 * Figure 8 (Astrocyte model simulated with and without the IP3-mediated calcium transient in response to a glutamate stimulus)
     * Run "test_full_system_with_Ca_forcing_catransient_andGlu.m"
-* Figure 9 and 11 (Astrocyte trajectory overlaid on stability diagrams)
+* Figures 9 and 11 (Astrocyte trajectory overlaid on stability diagrams)
     * Run "test_full_system_with_Ca_forcing_catransient_andGlu.m" to generate astrocyte-effect data
     * Run "test_full_system_with_Ca_forcing_elevatedK_catransient" to generate astrocyte-effect data
     * Run "remote_WB_neuron_ena_ek_loop.m" to generate the WB neuron model data
     * Run "figs_remote_WB_neuron_3dbifdiag_withastrocyte_trajectories.m" to generate the figures
-* Figure 10 (Astrocyte model simulated with and without the IP3-mediated calcium transient in response to elevated external potassium [K+]e(0) = 9 mM)
+* Figure 10 (Astrocyte model simulated with and without the IP3-mediated calcium transient in response to elevated external potassium)
     * Run "test_full_system_with_Ca_forcing_elevatedK_catransient"
+* Figures 12-13 (Kir model fitting and validation)
+    * Run "my_kir4_1_model.m"
+* Figure 14 (NKA model fitting and validation)
+    * Run "nakao_gadsby_1989_data_test.m"
+* Figures 15 and 16 (NCX model fitting and validation)
+    * Run "matsuoka_hilgemann_1992_data_test2.m"
+    * Then run "gall_etal_1999_data_test.m"
+* Figure 17 (EAAT2 model fitting and validation)
+    * Run Darshan's code
+
 
