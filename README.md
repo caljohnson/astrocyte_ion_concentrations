@@ -18,9 +18,9 @@ Astrocyte model to examine the level of astrocyte calcium activity needed to hav
     * Run "astrocyte_modulatory_role_elevatedK_tuning.m"
 * Figure 4 (Bifurcation diagrams for the WB neuron model)
     * Run "wb_neuron.ode" in XPP.  
-    *To generate the bifurcation diagram, start at a high Iapp, run to steady state in XPP, and launch AUTO.
+    * To generate the bifurcation diagram, start at a high Iapp, run to steady state in XPP, and launch AUTO.
         *Use Iapp as the bifurcation parameter and run with negative parameter steps to find the Hopf bifurcation point.
-    *To generate the frequency/period plots, generate the bifurcation diagram then change the plot type to frequency/period.
+    * To generate the frequency/period plots, generate the bifurcation diagram then change the plot type to frequency/period.
 * Figures 5-6 (Simulated ENa,EK stability diagrams for the WB neuron)
     * Run "remote_WB_neuron_ena_ek_loop.m" to generate the data
     * Run "figs_remote_WB_neuron_ena_ek_loop.m" to generate the figures from the data
