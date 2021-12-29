@@ -13,4 +13,4 @@ Astrocyte model to examine the level of astrocyte calcium activity needed to hav
 <summary>Model Fitting & Validation Figures</summary>
 
 * Figure 2 (Astrocyte model and experimental \cite{kirischuk2012sodium} (a) internal calcium response and (b) internal sodium response to a 1 mM bath-application of (external) glutamate)
-* Run "Glubath_compare_with_Data.m"
+    * Run "Glubath_compare_with_Data.m"
