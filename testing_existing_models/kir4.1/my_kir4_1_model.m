@@ -104,7 +104,7 @@ plot(Vm_data5, I_data5, 'c^','MarkerSize',10,'LineWidth',2)
 Chai_fit2 = lsqcurvefit(I_K,Chai_fit,Vm_data5,I_data5);
 plot(Vm, 0.8*I_K(Chai_fit,Vm), 'c--','LineWidth',3); 
 plot(Vm, I_K(Chai_fit2,Vm), 'c-','LineWidth',3); 
-legend({'model 1', 'Seifart et al., 2009','model 2', 'Seifart 2','model 3','WT- Sicca et al., 2016',...
+legend({'model 1', 'Seifert et al., 2009','model 2', 'Seifert 2','model 3','WT- Sicca et al., 2016',...
     'model 3 with 2.3x conductance', 'R18Q- Sicca et al., 2016','model 4',...
     'Hippocampus - Chai et al., 2017','model 5','Striatum - Chai et al., 2017',...
     'model 5 with 0.8x conductance', 'model 6'},...
@@ -125,7 +125,7 @@ plot(Vm_data2, I_data2, 'r^','MarkerSize',10,'LineWidth',2)
 plot(Vm, 2.3*I_K(Sicca_fit,Vm), 'm--','LineWidth',3);
 plot(Vm_data3, I_data3, 'm^','MarkerSize',10,'LineWidth',2)
 plot(Vm, I_K(Sicca_fit2,Vm), 'm-','LineWidth',3);
-legend({'model 2', 'Seifart 2','model 3','WT- Sicca et al., 2016',...
+legend({'model 2', 'Seifert 2','model 3','WT- Sicca et al., 2016',...
     'model 3 with 2.3x conductance', 'R18Q- Sicca et al., 2016','model 4'},...
     'Location','northwest')
 %axes lines
@@ -143,7 +143,7 @@ plot(Vm, I_K(Chai_fit,Vm), 'g-','LineWidth',3);
 plot(Vm_data5, I_data5, 'c^','MarkerSize',10,'LineWidth',2)
 plot(Vm, 0.8*I_K(Chai_fit,Vm), 'c--','LineWidth',3); 
 plot(Vm, I_K(Chai_fit2,Vm), 'c-','LineWidth',3); 
-legend({'model 1', 'Seifart et al., 2009', ...
+legend({'model 1', 'Seifert et al., 2009', ...
     'Hippocampus - Chai et al., 2017','model 5','Striatum - Chai et al., 2017',...
     'model 5 with 0.8x conductance', 'model 6'},...
     'Location','northwest')
@@ -161,21 +161,21 @@ subplot(1,3,1); bar(1,Seifart_fit(1),'b'); hold on;
 bar(2,Seifart_fit2(1),'k');
 bar(3,Sicca_fit(1),'r'); bar(4,Sicca_fit2(1),'m');
 bar(5,Chai_fit(1),'g'); bar(6,Chai_fit2(1),'c');
-ylabel('nA/mV'); title('G_{Kir}')
+ylabel('nA/mV'); title('g_{Kir}')
 set(gca,'XTick',1:6,'xticklabel',{'1','2','3','4','5','6'},'FontSize',20)
 
 subplot(1,3,2); bar(1,Seifart_fit(2),'b'); hold on;
 bar(2,Seifart_fit2(2),'k');
 bar(3,Sicca_fit(2),'r'); bar(4,Sicca_fit2(2),'m');
 bar(5,Chai_fit(2),'g'); bar(6,Chai_fit2(2),'c');
-ylabel('mV');title('V_1')
+ylabel('mV');title('V_{Kir1}')
 set(gca,'XTick',1:6,'xticklabel',{'1','2','3','4','5','6'},'FontSize',20)
 
 subplot(1,3,3); bar(1,Seifart_fit(3),'b'); hold on;
 bar(2,Seifart_fit2(3),'k');
 bar(3,Sicca_fit(3),'r'); bar(4,Sicca_fit2(3),'m');
 bar(5,Chai_fit(3),'g'); bar(6,Chai_fit2(3),'c');
-ylabel('mV'); title('V_2')
+ylabel('mV'); title('V_{Kir2}')
 set(gca,'XTick',1:6,'xticklabel',{'1','2','3','4','5','6'},'FontSize',20)
 
 %---------- Model at different [K+]_e as in Ransom & Sontheimer, 1995 --------------
@@ -198,7 +198,7 @@ set(gca,'FontSize',20);
 %axes lines
 line([-165,60],[0,0],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 line([0,0],[-150,100],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
-title('Model 1 (Seifart et al., 2009 Fit)');
+title('Model 1 (Seifert et al., 2009 Fit)');
 
 %using Sicca_fit
 Kes = [2, 3, 5, 10, 20]*1e-3; %M, external [K+] 
@@ -263,7 +263,7 @@ set(gca,'FontSize',20);
 %axes lines
 line([-165,60],[0,0],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
 line([0,0],[-150,100],'LineStyle','--', 'Color', 'k','HandleVisibility','off');
-title('Model 1 (Seifart Fit)');
+title('Model 1 (Seifert Fit)');
 
 subplot(1,3,2);
 plot(Vzero,Izero,'s','MarkerSize',20); hold on
@@ -324,7 +324,7 @@ end
 semilogx(Kes,Vrms1,'o--','LineWidth',3,'MarkerSize',10);
 semilogx(Kes,Vrms2,'o--','LineWidth',3,'MarkerSize',10);
 semilogx(Kes,Vrms4,'o--','LineWidth',3,'MarkerSize',10);
-legend('Nernst potential','V_{rest}, model 1 (Seifart fit)',...
+legend('Nernst potential','V_{rest}, model 1 (Seifert fit)',...
     'V_{rest}, model 2 (Sicca WT fit)','V_{rest}, model 4 (Chai HC fit)',...
     'Location','southeast');
 set(gca,'FontSize',20);

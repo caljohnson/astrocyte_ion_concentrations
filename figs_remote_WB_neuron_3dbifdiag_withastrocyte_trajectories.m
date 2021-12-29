@@ -108,30 +108,18 @@ for ii=1:size(Iapps,2)
 end
 
 % EKmax = -56;
-EKmax = -61;
+EKmax = -60.5;
 x1 = x(y<EKmax);
 y1 = y(y<EKmax);
 z1 = z(y<EKmax);
 
-x2 = x(y>=EKmax & z>0.11);
-y2 = y(y>=EKmax & z>0.11);
-z2 = z(y>=EKmax & z>0.11);
+EKmax = -60.5;
+zmax = 0.122;
+x2 = x(y>=EKmax & z>zmax);
+y2 = y(y>=EKmax & z>zmax);
+z2 = z(y>=EKmax & z>zmax);
 
 
-% B = [x1(:) y1(:) ones(size(x1(:)))] \ z1(:);
-% xv = linspace(min(x1), max(x1), 100)';
-% yv = linspace(min(y1), max(y1), 100)';
-% [X1,Y1] = meshgrid(xv, yv);
-% Z1 = reshape([X1(:), Y1(:), ones(size(X1(:)))] * B, numel(xv), []);
-% mesh(X1, Y1, Z1,'FaceColor','g', 'FaceAlpha', 0.5)
-% 
-% B2 = [x2(:) y2(:) ones(size(x2(:)))] \ z2(:);
-% xv2 = linspace(min(x2), max(x2), 100)';
-% yv2 = linspace(min(y2), max(y2), 100)';
-% [X2,Y2] = meshgrid(xv2, yv2);
-% Z2 = reshape([X2(:), Y2(:), ones(size(X2(:)))] * B2, numel(xv2), []);
-% mesh(X2, Y2, Z2,'FaceColor','r', 'FaceAlpha', 0.5)
-% 
 nx = 100 ; ny = 100 ;
 xi = linspace(min(x1),max(x1),nx) ; 
 yi = linspace(min(y1),max(y1),ny) ; 
@@ -155,13 +143,13 @@ set(gca,'FontSize',20);
 plot3(V_Nas,V_Ks,0.1.*ones(size(V_Nas)),'b:','LineWidth',4);
 plot3(V_Nas2,V_Ks2,0.1.*ones(size(V_Nas2)),'r-','LineWidth',4);
 
-% legend('SNIC','HB',...
-% 'Astrocyte modulatory trajectory, with Ca-transient',...
-% 'Astrocyte modulatory trajectory, no Ca-transient',...
-% 'Location','northeast');
+legend('SNIC','HB',...
+'Astrocyte modulatory trajectory, with Ca-transient',...
+'Astrocyte modulatory trajectory, no Ca-transient',...
+'Location','northeast');
 
 %highlight trajectories "elevated K to rest"
-load('Na_K_outs_superelevatedK.mat')
+load('Na_K_outs_elevatedK.mat')
 %condition 1 = elevated potassium, calcium transient
 K_out = K_outs{1};
 Na_out = Na_outs{1};
@@ -175,9 +163,9 @@ plot3(V_Nas,V_Ks,0.1.*ones(size(V_Nas)),'m-','LineWidth',4)
 %condition 2 = elevated potassium, no Ca-transient
 K_out = K_outs{2};
 Na_out = Na_outs{2};
-V_Nas = (R*T/F).*log(Na_out./Na_in).*1e3;
-V_Ks = (R*T/F).*log(K_out./K_in).*1e3;
-plot3(V_Nas,V_Ks,0.1.*ones(size(V_Nas)),'c-','LineWidth',4)
+V_Nas2 = (R*T/F).*log(Na_out./Na_in).*1e3;
+V_Ks2 = (R*T/F).*log(K_out./K_in).*1e3;
+plot3(V_Nas2,V_Ks2,0.1.*ones(size(V_Nas2)),'c-','LineWidth',4)
 
 
 legend('SNIC','HB',...
@@ -187,32 +175,108 @@ legend('SNIC','HB',...
 'Elevated K+, no Ca-transient',...
 'Location','northeast');
 
-
 %focus on one section where the astrocyte trajectory leads through a
-%no-oscillation-zone
-load('WB_neuron_ena_ek_loop_Iapp_0165.mat');
-   
-freq(freq==0) = NaN;
+%no-oscillation-zone with Ca effects
+% load('WB_neuron_ena_ek_loop_Iapp_0165.mat');
+freqs = reshape(freq(8,:,:),size(E_Ks,2),size(E_Nas,2));
+[x,y] = meshgrid(E_Nas,E_Ks);
+x = x(:);
+y = y(:);
+
+freqs(freqs==0) = NaN;
 figure(20); clf;
-scatter(x,y,30,freq(:),'LineWidth',4); hold on
+scatter(x,y,30,freqs(:),'LineWidth',4); hold on
 colorbar
 xlabel('E_{Na} (mV)'); ylabel('E_K (mV)');
 xlim([min(E_Nas) max(E_Nas)]); ylim([min(E_Ks) max(E_Ks)]);
-title(['Frequency (Hz), I_{app} = ' num2str(Iapps(1))]);
+title(['Frequency (Hz), I_{app} = ' num2str(Iapps(8))]);
 set(gca,'FontSize',20);
-plot(V_Nas,V_Ks,'b-','LineWidth',4)
-plot(V_Nas2,V_Ks2,'r-','LineWidth',4)
+%highlight "normal" conditions
+plot(55.0662, -90.0758, 'go', 'LineWidth',4,'MarkerSize',20);
+%highlight elevated K conditions
+plot(55.0572, -62.4107, 'ro', 'LineWidth',4,'MarkerSize',20);
+%add astrocyte modulatory trajectories
+plot(V_Nas,V_Ks,'m-','LineWidth',4)
+plot(V_Nas2,V_Ks2,'c-','LineWidth',4)
+legend('frequency, Hz',...
+     'resting conditions','elevated K^+',...
+    'astrocyte modulatory trajectory, with Ca-transient',...
+    'astrocyte modulatory trajectory, no Ca-transient');
 
 inds = find(y<= -80);
 figure(21); clf;
-scatter(x(inds),y(inds),30,freq(inds),'LineWidth',4); hold on
+scatter(x(inds),y(inds),30,freqs(inds),'LineWidth',4); hold on
 colorbar
 xlabel('E_{Na} (mV)'); ylabel('E_K (mV)');
 xlim([min(E_Nas) max(E_Nas)]); ylim([min(E_Ks) -80]);
-title(['Frequency (Hz), I_{app} = ' num2str(Iapps(1))]);
+title(['Frequency (Hz), I_{app} = ' num2str(Iapps(8))]);
 set(gca,'FontSize',20);
+%highlight "normal" conditions
+plot(55.0662, -90.0758, 'go', 'LineWidth',4,'MarkerSize',20);
+%highlight elevated K conditions
+plot(55.0572, -62.4107, 'ro', 'LineWidth',4,'MarkerSize',20);
+%add astrocyte modulatory trajectories
+plot(V_Nas,V_Ks,'m-','LineWidth',4)
+plot(V_Nas2,V_Ks2,'c-','LineWidth',4)
+legend('frequency, Hz',...
+     'resting conditions','elevated K^+',...
+    'astrocyte modulatory trajectory, with Ca-transient',...
+    'astrocyte modulatory trajectory, no Ca-transient');
+
+
+%focus on one section where the astrocyte trajectory leads through a
+%no-oscillation-zone with Glu effects
+freqs = reshape(freq(8,:,:),size(E_Ks,2),size(E_Nas,2));
+[x,y] = meshgrid(E_Nas,E_Ks);
+x = x(:);
+y = y(:);
+
+load('Na_K_outs_Glupulses.mat');
+K_out = K_outs{1};
+Na_out = Na_outs{1};
+K_in = 93.2; %mM  - set to make V_K = -90 mV at rest
+Na_in = 17.8; %mM - set to make V_Na = 55 mV at rest
+V_Nas = (R*T/F).*log(Na_out./Na_in).*1e3;
+V_Ks = (R*T/F).*log(K_out./K_in).*1e3;
+
+K_out2 = K_outs{2};
+Na_out2 = Na_outs{2};
+V_Nas2 = (R*T/F).*log(Na_out2./Na_in).*1e3;
+V_Ks2 = (R*T/F).*log(K_out2./K_in).*1e3;
+
+freqs(freqs==0) = NaN;
+figure(22); clf;
+scatter(x,y,30,freqs(:),'LineWidth',4); hold on
+colorbar
+xlabel('E_{Na} (mV)'); ylabel('E_K (mV)');
+xlim([min(E_Nas) max(E_Nas)]); ylim([min(E_Ks) max(E_Ks)]);
+title(['Frequency (Hz), I_{app} = ' num2str(Iapps(8))]);
+set(gca,'FontSize',20);
+%highlight "normal" conditions
+plot(55.0662, -90.0758, 'go', 'LineWidth',4,'MarkerSize',20);
+%add astrocyte modulatory trajectories
 plot(V_Nas,V_Ks,'b-','LineWidth',4)
 plot(V_Nas2,V_Ks2,'r-','LineWidth',4)
 legend('frequency, Hz',...
+     'resting conditions',...
     'astrocyte modulatory trajectory, with Ca-transient',...
     'astrocyte modulatory trajectory, no Ca-transient');
+
+inds = find(y<= -80);
+figure(21); clf;
+scatter(x(inds),y(inds),30,freqs(inds),'LineWidth',4); hold on
+colorbar
+xlabel('E_{Na} (mV)'); ylabel('E_K (mV)');
+xlim([min(E_Nas) max(E_Nas)]); ylim([min(E_Ks) -80]);
+title(['Frequency (Hz), I_{app} = ' num2str(Iapps(8))]);
+set(gca,'FontSize',20);
+%highlight "normal" conditions
+plot(55.0662, -90.0758, 'go', 'LineWidth',4,'MarkerSize',20);
+%add astrocyte modulatory trajectories
+plot(V_Nas,V_Ks,'b-','LineWidth',4)
+plot(V_Nas2,V_Ks2,'r-','LineWidth',4)
+legend('frequency, Hz',...
+     'resting conditions',...
+    'astrocyte modulatory trajectory, with Ca-transient',...
+    'astrocyte modulatory trajectory, no Ca-transient');
+

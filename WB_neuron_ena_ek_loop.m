@@ -55,13 +55,13 @@ for ii=1:size(Iapps,2)
 %     figure(12); plot(t,X(:,1), 'LineWidth',4);
     spiked_1 = 0;
     spiked_2 = 0;
-    tt = 1;
+    tt = round(size(t,1)/2); %start looking for frequency in second half of simulation trace
     while tt <= size(t,1) && spiked_2 == 0
-        if spiked_1 == 1 && X(tt,1) > thresh && X(tt-1) <=thresh && spiked_2 == 0
+        if spiked_1 == 1 && X(tt,1) > thresh && X(tt-1,1) <=thresh && spiked_2 == 0
             spiked_2 = 1;
             spike_time2 = tt;
         end
-        if X(tt,1) > thresh && X(tt-1) <=thresh && spiked_1 == 0
+        if X(tt,1) > thresh && X(tt-1,1) <=thresh && spiked_1 == 0
             spiked_1 = 1;
             spike_time1 = tt;
         end

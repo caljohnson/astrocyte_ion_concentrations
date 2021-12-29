@@ -6,7 +6,7 @@ function [I_current] = nka_current(Na_in,K_out,type)
 %                             or Cressman et al. 2009 (type = 3)
 
 if nargin < 4 || isempty(type)
-    type = 2;
+    type = 4;
 end
 
 if(type==1)%Kager et al. 2000
@@ -27,7 +27,7 @@ elseif(type==4) %my own, based on Nakao & Gadsby 1989 data
     I_NKA_Khill = @(x, K_out)  (K_out.^x(2)./(x(1).^x(2) + K_out.^x(2)));
     Nahill_fit = [10.5; 1.3;];
     Khill_fit = [1.1; 1.15;];
-    I_current = 2e-2.*I_NKA_Nahill(Nahill_fit,Na_in).*I_NKA_Khill(Khill_fit,K_out);
+    I_current = I_NKA_Nahill(Nahill_fit,Na_in).*I_NKA_Khill(Khill_fit,K_out);
 end
 
 % K_flux = -2*I_current;

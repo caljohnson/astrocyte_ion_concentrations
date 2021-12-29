@@ -8,7 +8,8 @@
 % load('remote_WB_neuron_ena_ek_loop_v1.mat'); %v1 - EK-95 to -50, ENa50 to 60
 % load('remote_WB_neuron_ena_ek_loop_v2.mat'); %v2 - -95 to -80, ENa50 to 60
 % load('remote_WB_neuron_ena_ek_loop_v3.mat'); %v3 - EK-95 to -80, ENa50 to 60, Iapp 0.1-0.2
-load('remote_WB_neuron_ena_ek_loop_v4.mat'); %v4 - EK-95 to -50, ENa50 to 60, Iapp 0.1-0.2
+% load('remote_WB_neuron_ena_ek_loop_v4.mat'); %v4 - EK-95 to -50, ENa50 to 60, Iapp 0.1-0.2
+load('remote_WB_neuron_ena_ek_loop_v5.mat'); %v5 - EK-95 to -50, ENa50 to 60, Iapp 0.1-0.2, fixed period finder
 
 [x,y] = meshgrid(E_Nas,E_Ks);
 x = x(:);
@@ -86,30 +87,19 @@ for ii=1:size(Iapps,2)
 
 end
 
-EKmax = -56;
+EKmax = -60.5;
 x1 = x(y<EKmax);
 y1 = y(y<EKmax);
 z1 = z(y<EKmax);
 
-x2 = x(y>=EKmax & z>0.11);
-y2 = y(y>=EKmax & z>0.11);
-z2 = z(y>=EKmax & z>0.11);
+EKmax = -60.5;
+zmax = 0.122;
+x2 = x(y>=EKmax & z>zmax);
+y2 = y(y>=EKmax & z>zmax);
+z2 = z(y>=EKmax & z>zmax);
 
 
-% B = [x1(:) y1(:) ones(size(x1(:)))] \ z1(:);
-% xv = linspace(min(x1), max(x1), 100)';
-% yv = linspace(min(y1), max(y1), 100)';
-% [X1,Y1] = meshgrid(xv, yv);
-% Z1 = reshape([X1(:), Y1(:), ones(size(X1(:)))] * B, numel(xv), []);
-% mesh(X1, Y1, Z1,'FaceColor','g', 'FaceAlpha', 0.5)
-% 
-% B2 = [x2(:) y2(:) ones(size(x2(:)))] \ z2(:);
-% xv2 = linspace(min(x2), max(x2), 100)';
-% yv2 = linspace(min(y2), max(y2), 100)';
-% [X2,Y2] = meshgrid(xv2, yv2);
-% Z2 = reshape([X2(:), Y2(:), ones(size(X2(:)))] * B2, numel(xv2), []);
-% mesh(X2, Y2, Z2,'FaceColor','r', 'FaceAlpha', 0.5)
-% 
+
 nx = 100 ; ny = 100 ;
 xi = linspace(min(x1),max(x1),nx) ; 
 yi = linspace(min(y1),max(y1),ny) ; 

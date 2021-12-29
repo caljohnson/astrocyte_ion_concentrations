@@ -16,15 +16,15 @@ global g_EAAT2 g_Kir41 g_NCX rho_NKA R F T ...
 F = 96485; %C/mol, Faraday's constant
 R = 8.31; %J/mol K, ideal gas constant
 T = 310; %K, absolute temperature
-g_EAAT2 = 5e-14;
-g_Kir41 = 1e-14;
-g_NCX = 1e-9;
-rho_NKA = 1e-13;
+g_EAAT2 = 1.2e-13;
+g_Kir41 = 1e-13;
+g_NCX = 5e-15;
+rho_NKA = 24e-14;
 VolE = 1.41e-18;  %L, from 1.41e-3 micrometers^3, extracellular/synaptic cleft volume from Handy, Lawley, Borisyuk 2018
 % VolA = VolE*(1/2); %L, arbitrary - this one gives the right internal Na/Ca shapes with Glu=2mM
 VolA = VolE*(1); %L, arbitrary - this is what they use in Oschmann et al. 2017
 g_leak = 0;%1e-14;
-g_Na_leak1 = 2.65e-16; %Na in<->out
+g_Na_leak1 = 2.6217e-15; %Na in<->out
 g_Na_leak2 = 0;%1e-14; %Na in->further in/other astrocytes
 g_K_leak = 3.68e-2; %K in->further in/other astrocytes
 g_Ca_leak = 1e2; %Ca in -> ER
@@ -59,14 +59,17 @@ Vm = -80; %mV, resting astrocyte membrane potential Kirischuk et al. 2012
 Na_outs = {};
 K_outs = {};
 ts = {};
-tmaxplot = 5e2;
-tspan = [0,tmaxplot];
+tmaxplot = 2e2;
+tspan = [0,5e2];
 tpulse = 20;
 
 for jj=1:2
 if jj==1
-    Ca_force = @(t) 0.*t + 1e-1.*(t-0).*(t>=0 & t<5) + ...
-        (5e-1 - 1e-1.*(t-5)).*(t>=5 & t<10) ; %one peak
+%old version
+    %     Ca_force = @(t) 0.*t + 1e-1.*(t-0).*(t>=0 & t<5) + ...
+%         (5e-1 - 1e-1.*(t-5)).*(t>=5 & t<10) ; %one peak
+Ca_force = @(t) 1.1.*(0.*t + 1e-1.*(t-0).*(t>=0 & t<5) + ...
+        (5e-1 - 1e-1.*(t-5)).*(t>=5 & t<10)); %one peak
 % elseif jj==2
 %      Ca_force = @(t) 0.*t + 1e-13.*(t-0).*(t>=0 & t<5) + ...
 %         (5e-13 - 1e-13.*(t-5)).*(t>=5 & t<10) +...

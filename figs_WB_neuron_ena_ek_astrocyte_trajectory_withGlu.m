@@ -1,9 +1,9 @@
 %figs_WB_neuron_ena_ek_astrocyte_trajectory
 
-% load('remote_WB_neuron_ena_ek_loop_v4.mat');
+load('remote_WB_neuron_ena_ek_loop_v4.mat');
 % load('remote_WB_neuron_ena_ek_loop_v5.mat');
 % load('remote_WB_neuron_ena_ek_loop_v6.mat');
-load('remote_WB_neuron_ena_ek_loop_v3.mat');
+% load('remote_WB_neuron_ena_ek_loop_v3.mat');
 
 close all; 
 [x,y] = meshgrid(E_Nas,E_Ks);

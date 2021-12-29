@@ -1,5 +1,5 @@
-function [dXdt] = wang_buzsaki_hippocampal_neuron_ode(t,X,I_app,E_Na,E_K)
-%wang_buzsaki_hippocampal_neuron_ode 
+function [dXdt] = WB_neuron_ode_variable_Icurrent(t,X,I_app,E_Na,E_K)
+%WB_neuron_ode 
 %   ODE for a simple Wang-Buzsaki hippocampal neuron
 %   with time-dependent input current I
 %   and variable E_K, E_Na (from astrocyte effects)
@@ -12,6 +12,7 @@ Cm = 1; %muF/cm^2
 g_L = 0.1;%mS/cm^2
 g_Na = 35;%mS/cm^2
 g_K = 9; %mS/cm^2
+% g_K = 15; %fourcaud et al. 2003
 E_L = -65; %mV
 % E_Na = 55;%mV - i made these inputs to the code, not necessary!
 % E_K = -90;%mV
@@ -42,7 +43,7 @@ I_K = @(V,n) g_K.*n.^4.*(V-E_K);
 % I_app = 0;% I(t);
 
 %state variables V,h,n
-dVdt = @(V,h,n) (1/Cm).*(I_app -I_Na(V,h) -I_K(V,n) -I_L(V) );
+dVdt = @(V,h,n) (1/Cm).*(I_app(t) -I_Na(V,h) -I_K(V,n) -I_L(V) );
 dhdt = @(V,h,n) phi.*(h_inf(V)-h)./tau_h(V); %these are the version from Komek et al. 2012
 dndt = @(V,h,n) phi.*(n_inf(V)-n)./tau_n(V); %these are the version from Komek et al. 2012
 % dhdt = @(V,h,n) phi.*(alpha_h(V).*(1-h) - beta_h(V).*h); %original equations from Wang-Buzsaki

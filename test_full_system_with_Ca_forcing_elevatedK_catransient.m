@@ -16,14 +16,21 @@ global g_EAAT2 g_Kir41 g_NCX rho_NKA R F T ...
 F = 96485; %C/mol, Faraday's constant
 R = 8.31; %J/mol K, ideal gas constant
 T = 310; %K, absolute temperature
-g_EAAT2 = 5e-14;
-g_Kir41 = 1e-14;
-g_NCX = 1e-9;
-rho_NKA = 1e-13;
+% g_EAAT2 = 5e-14; %version pre-10/19
+g_EAAT2 = 1.2e-13; %new as of 10/19, fits Glu bath data
+% g_Kir41 = 1e-14;version pre-10/19
+g_Kir41 = 1e-13; %new as of 10/19, fits Glu bath data
+% g_NCX = 1e-9; %version pre-10/19
+% g_NCX = 1e-10; %
+g_NCX = 5e-15; %new as of 10/19, fits Glu bath data
+% rho_NKA = 2e-14; %version pre-10/19
+rho_NKA = 24e-14; %new as of 10/19, fits Glu bath data
 VolE = 1.41e-18;  %L, from 1.41e-3 micrometers^3, extracellular/synaptic cleft volume from Handy, Lawley, Borisyuk 2018
-VolA = VolE*(1); %L, arbitrary
+VolA = VolE*(1); %L, arbitrary, this is waht they used in Oschmann et al
 g_leak = 0;%1e-14;
-g_Na_leak1 = 2.65e-16; %Na in<->out
+% g_Na_leak1 = 2.1848e-16; %Na in<->out %version pre-10/19
+% g_Na_leak1 = 2.04e-15;%new as of 10/19, fits Glu bath data
+g_Na_leak1 = 2.6317e-15;%new as of 10/19, fits Glu bath data
 g_Na_leak2 = 0;%1e-14; %Na in->further in/other astrocytes
 g_K_leak = 3.68e-2; %K in->further in/other astrocytes
 g_Ca_leak = 1e2; %Ca in -> ER
@@ -38,7 +45,8 @@ Ca_in = 73*1e-6; %mM - Kirischuk et al. 2012
 %elevated synaptic cleft (extracellular) concentrations
 % Glu_out = 0.1; %mM (elevated) - Flanagan et al 2018
 Glu_out = 0; %mM (rest) - Flanagan et al 2018
-K_out = 12; %12mM (elevated by seizures) - textbook/Flanagan et al. 2018
+% K_out = 12; %12mM (elevated by seizures) - textbook/Flanagan et al. 2018
+K_out = 9; %9mM (elevated by seizures) - not quite so high
 % K_out = 5; %Kirischuk et al. 2012
 % K_out = 3.5; %Huguet et al. 2016
 % K_out = 4; %mM (elevated by one nearby action potential) - Walz 1999
@@ -60,8 +68,16 @@ tmaxplot = 5e2;
 
 for jj=1:3
 if jj==1
-    Ca_force = @(t) 0.*t + 1e-1.*(t-0).*(t>=0 & t<5) + ...
-        (5e-1 - 1e-1.*(t-5)).*(t>=5 & t<10) ; %one peak
+%version pre-10/19    
+%     Ca_force = @(t) 0.*t + 1e-1.*(t-0).*(t>=0 & t<5) + ...
+%         (5e-1 - 1e-1.*(t-5)).*(t>=5 & t<10) ; %one peak
+
+% new version 10/19
+Ca_force = @(t) 1.1.*(0.*t + 1e-1.*(t-0).*(t>=0 & t<5) + ...
+        (5e-1 - 1e-1.*(t-5)).*(t>=5 & t<10)); %one peak
+%    Ca_force = @(t) 1.*(0.*t + 1e-1.*(t-0).*(t>=0 & t<7.5) + ...
+%         (7.5e-1 - 1e-1.*(t-7.5)).*(t>=7.5 & t<15)) ; %one peak
+
 % elseif jj==2
 %      Ca_force = @(t) 0.*t + 1e-13.*(t-0).*(t>=0 & t<5) + ...
 %         (5e-13 - 1e-13.*(t-5)).*(t>=5 & t<10) +...
@@ -226,6 +242,6 @@ Na_outs{jj} = X(:,4);
 K_outs{jj} = X(:,5);
 ts{jj} = t;
 
-% save('Na_K_outs_elevatedK.mat','ts','Na_outs', 'K_outs');
+save('Na_K_outs_elevatedK.mat','ts','Na_outs', 'K_outs');
 end
-figure(5);
+figure(1);

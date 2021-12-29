@@ -1,8 +1,8 @@
-function [dXdt] = wang_buzsaki_hippocampal_neuron_ode(t,X,I_app,E_Na,E_K)
-%wang_buzsaki_hippocampal_neuron_ode 
+function [dXdt] = wb_neuron_ode_variable_es(t,X,I_app,E_Na,E_K)
+%wb_neuron_ode_variable_es 
 %   ODE for a simple Wang-Buzsaki hippocampal neuron
 %   with time-dependent input current I
-%   and variable E_K, E_Na (from astrocyte effects)
+%   and time-dependent E_Na, E_K (from astrocyte effects)
 
 %parameters
 phi = 5;
@@ -34,22 +34,22 @@ tau_n = @(V) 1.0./(alpha_n(V)+beta_n(V));
 %leak current
 I_L = @(V) g_L.*(V - E_L);
 %transient sodium current
-I_Na = @(V,h) g_Na.*(m_inf(V)).^3.*h.*(V-E_Na); 
+I_Na = @(t,V,h) g_Na.*(m_inf(V)).^3.*h.*(V-E_Na(t)); 
 %delayed rectifier potassium current
-I_K = @(V,n) g_K.*n.^4.*(V-E_K);
+I_K = @(t,V,n) g_K.*n.^4.*(V-E_K(t));
 
 %applied current at time t
 % I_app = 0;% I(t);
 
 %state variables V,h,n
-dVdt = @(V,h,n) (1/Cm).*(I_app -I_Na(V,h) -I_K(V,n) -I_L(V) );
-dhdt = @(V,h,n) phi.*(h_inf(V)-h)./tau_h(V); %these are the version from Komek et al. 2012
-dndt = @(V,h,n) phi.*(n_inf(V)-n)./tau_n(V); %these are the version from Komek et al. 2012
+dVdt = @(t,V,h,n) (1/Cm).*(I_app -I_Na(t,V,h) -I_K(t,V,n) -I_L(V) );
+dhdt = @(t,V,h,n) phi.*(h_inf(V)-h)./tau_h(V); %these are the version from Komek et al. 2012
+dndt = @(t,V,h,n) phi.*(n_inf(V)-n)./tau_n(V); %these are the version from Komek et al. 2012
 % dhdt = @(V,h,n) phi.*(alpha_h(V).*(1-h) - beta_h(V).*h); %original equations from Wang-Buzsaki
 % dndt = @(V,h,n) phi.*(alpha_n(V).*(1-n) - beta_n(V).*n); %original equations from Wang-Buzsaki
 
 %full system
-dXdt = [dVdt(X(1), X(2), X(3)); dhdt(X(1),X(2),X(3)); dndt(X(1),X(2),X(3));];
+dXdt = [dVdt(t, X(1), X(2), X(3)); dhdt(t,X(1),X(2),X(3)); dndt(t,X(1),X(2),X(3));];
 
 end
 

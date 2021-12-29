@@ -1,5 +1,5 @@
-function [dXdt] = wang_buzsaki_hippocampal_neuron_ode(t,X,I_app,E_Na,E_K)
-%wang_buzsaki_hippocampal_neuron_ode 
+function [dXdt] = WB_neuron_ode(t,X,I_app,E_Na,E_K)
+%WB_neuron_ode 
 %   ODE for a simple Wang-Buzsaki hippocampal neuron
 %   with time-dependent input current I
 %   and variable E_K, E_Na (from astrocyte effects)
@@ -12,6 +12,7 @@ Cm = 1; %muF/cm^2
 g_L = 0.1;%mS/cm^2
 g_Na = 35;%mS/cm^2
 g_K = 9; %mS/cm^2
+% g_K = 15; %fourcaud et al. 2003
 E_L = -65; %mV
 % E_Na = 55;%mV - i made these inputs to the code, not necessary!
 % E_K = -90;%mV

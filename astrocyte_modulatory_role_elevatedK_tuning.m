@@ -25,14 +25,19 @@ global g_EAAT2 g_Kir41 g_NCX rho_NKA R F T ...
 F = 96485; %C/mol, Faraday's constant
 R = 8.31; %J/mol K, ideal gas constant
 T = 310; %K, absolute temperature
-g_EAAT2 = 5e-14;
-g_Kir41 = 1e-14;
-g_NCX = 1e-9;
-rho_NKA = 1e-13;
+% g_EAAT2 = 5e-14;
+g_EAAT2 = 1.2e-13; %new - 10/19
+% g_Kir41 = 1e-14;
+g_Kir41 = 1e-13; %new - 10/19
+% g_NCX = 1e-9;
+g_NCX = 5e-15; %new - 10/19
+% rho_NKA = 2e-14;
+rho_NKA = 24e-14; %new - 10/19
 VolE = 1.41e-18;  %L, from 1.41e-3 micrometers^3, extracellular/synaptic cleft volume from Handy, Lawley, Borisyuk 2018
 VolA = VolE*(1); %L, arbitrary
 g_leak = 0;%1e-14;
-g_Na_leak1 = 2.65e-16; %Na in<->out
+% g_Na_leak1 = 2.1848e-16; %Na in<->out
+g_Na_leak1 = 2.6217e-15; %new 10/19
 g_Na_leak2 = 0;%1e-14; %Na in->further in/other astrocytes
 g_K_leak = 3.68e-2; %K in->further in/other astrocytes
 g_Ca_leak = 1e2; %Ca in -> ER
@@ -44,7 +49,7 @@ Ca_in = 73*1e-6; %mM - Kirischuk et al. 2012
 
 %elevated synaptic cleft (extracellular) concentrations
 Glu_out = 0; %mM (rest)
-K_out = 12; %12mM (elevated by seizures) - textbook/Flanagan et al. 2018
+K_out = 9; %12mM (elevated by seizures) - textbook/Flanagan et al. 2018
 Na_out = 140; %mM - Kirischuk et al. 2012
 
 Ca_out = 0.87; %mM - rest state in this model
